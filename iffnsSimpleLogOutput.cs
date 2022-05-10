@@ -39,6 +39,14 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
             return "\t";
         }
 
+        private void Start()
+        {
+            if (OnScreen && Networking.LocalPlayer.IsUserInVR())
+            {
+                gameObject.SetActive(false);
+            }
+        }
+
         private void Update()
         {
             /*
