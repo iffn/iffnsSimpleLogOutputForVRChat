@@ -12,22 +12,28 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput.Examples
     {
         [SerializeField] iffnsSimpleLogOutput logOutput;
 
+        //Computer time
         System.DateTime offsetDateTime;
 
+        //Stop watch
         Stopwatch stopwatchSinceStart;
 
+        //My time
         double referenceTime;
 
         void Start()
         {
-            referenceTime = Networking.GetServerTimeInSeconds();
-
+            //Computer time
             offsetDateTime = System.DateTime.UtcNow;
-
+            
+            //Stop watch
             stopwatchSinceStart = new Stopwatch();
-
             stopwatchSinceStart.Start();
 
+            //VRC server time
+            referenceTime = Networking.GetServerTimeInSeconds();
+
+            //Titles
             logOutput.SetTitle(
                 "Stopwatch time" + logOutput.GetTabSymbol() +
                 "Computer time" + logOutput.GetTabSymbol() +
@@ -41,8 +47,8 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput.Examples
         {
             if (Input.GetKey(KeyCode.P))
             {
-                double stopwatchTime = stopwatchSinceStart.Elapsed.TotalSeconds;
                 double ComputerTime = (System.DateTime.UtcNow - offsetDateTime).TotalSeconds;
+                double stopwatchTime = stopwatchSinceStart.Elapsed.TotalSeconds;
                 float UnityTime = Time.time;
                 double VRCServerTime = Networking.GetServerTimeInSeconds();
                 double myTime = referenceTime + stopwatchSinceStart.Elapsed.TotalSeconds;
