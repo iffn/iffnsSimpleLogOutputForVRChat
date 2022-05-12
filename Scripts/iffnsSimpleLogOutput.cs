@@ -33,7 +33,7 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
         string title;
         string logText = "";
         bool paused = false;
-        bool currentOutput = true;
+        bool outputUpToDate = true;
 
         public void SetTitle(string title)
         {
@@ -61,9 +61,9 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
             {
                 WriteStatus();
 
-                if (currentOutput)
+                if (outputUpToDate)
                 {
-                    currentOutput = false;
+                    outputUpToDate = false;
                     LogOutOfDateWarning.SetActive(true);
                 }
             }
@@ -77,9 +77,9 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
             {
                 WriteOutput();
 
-                if (!currentOutput)
+                if (!outputUpToDate)
                 {
-                    currentOutput = true;
+                    outputUpToDate = true;
                     LogOutOfDateWarning.SetActive(false);
                 }
             }
@@ -171,7 +171,18 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
                 logText = "";
                 lineCount = 0;
 
-                if(!paused) WriteOutput();
+                if (!paused)
+                {
+                    WriteOutput();
+                }
+                else
+                {
+                    if (outputUpToDate)
+                    {
+                        outputUpToDate = false;
+                        LogOutOfDateWarning.SetActive(true);
+                    }
+                }
             }
 
             if (Input.GetKeyDown(PauseKey))
