@@ -9,9 +9,12 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput.Helpers
     {
         private void Update()
         {
+            #if UNITY_EDITOR
+            return;
+            #endif
+
             transform.position = Networking.LocalPlayer.GetBonePosition(HumanBodyBones.Head) + Networking.LocalPlayer.GetBoneRotation(HumanBodyBones.Head) * Vector3.forward;
             transform.rotation = Networking.LocalPlayer.GetBoneRotation(HumanBodyBones.Head);
-            Debug.Log(Networking.LocalPlayer.GetBonePosition(HumanBodyBones.Head));
         }
     }
 }
