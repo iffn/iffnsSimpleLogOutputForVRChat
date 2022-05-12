@@ -22,8 +22,10 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
         [SerializeField] Text LoggedLineCount;
         [SerializeField] Text HowToText;
         [SerializeField] bool OnScreen;
+        [SerializeField] GameObject LogOutOfDateWarning;
         //[SerializeField] Canvas LinkedCanvas;
         [Header("For On screen display only: (Do not change)")]
+        [SerializeField] GameObject OnScreenOutputDisplayHolder;
         [SerializeField] GameObject OnScreenActivator;
 
         const string newLine = "\n";
@@ -31,6 +33,7 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
         string title;
         string logText = "";
         bool paused = false;
+        bool currentOutput = true;
 
         public void SetTitle(string title)
         {
@@ -57,6 +60,12 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
             else
             {
                 WriteStatus();
+
+                if (currentOutput)
+                {
+                    currentOutput = false;
+                    LogOutOfDateWarning.SetActive(true);
+                }
             }
         }
 
@@ -67,6 +76,12 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
             if (!paused)
             {
                 WriteOutput();
+
+                if (!currentOutput)
+                {
+                    currentOutput = true;
+                    LogOutOfDateWarning.SetActive(false);
+                }
             }
             else
             {
@@ -156,7 +171,7 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
                 logText = "";
                 lineCount = 0;
 
-                WriteOutput();
+                if(!paused) WriteOutput();
             }
 
             if (Input.GetKeyDown(PauseKey))
@@ -169,9 +184,9 @@ namespace iffnsStuff.iffnsVRCStuff.DebugOutput
             {
                 if (Input.GetKeyDown(OnScreenOutputToggle))
                 {
-                    bool newState = !OutputField.gameObject.activeSelf;
+                    bool newState = !OnScreenOutputDisplayHolder.activeSelf;
 
-                    OutputField.gameObject.SetActive(newState);
+                    OnScreenOutputDisplayHolder.SetActive(newState);
                     #if !UNITY_EDITOR
                     if (OnScreenActivator != null) OnScreenActivator.SetActive(newState);
                     #endif
